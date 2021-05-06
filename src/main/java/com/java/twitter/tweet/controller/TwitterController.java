@@ -1,24 +1,33 @@
-package com.java.twitter.controller;
+package com.java.twitter.tweet.controller;
 
-import org.springframework.social.twitter.api.SearchResults;
-import org.springframework.social.twitter.api.Twitter;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+import com.java.twitter.tweet.model.SentimentType;
+import com.java.twitter.tweet.service.TwitterService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import twitter4j.TwitterException;
+
+
+@Controller
 public class TwitterController {
-    final Twitter twitter;
+    final TwitterService twitterService;
 
-    public TwitterController(Twitter twitter) {
-        this.twitter = twitter;
+
+    public TwitterController(TwitterService twitterService) {
+        this.twitterService = twitterService;
     }
 
-    @CrossOrigin
-    @GetMapping
-    public SearchResults search()
-    {
-        SearchResults results = twitter.searchOperations().search("bed");
-        return results;
+    @GetMapping("/twitter")
+    public String covidRelatedTweets(Model model) throws TwitterException {
+        model.addAttribute("tweets",twitterService.covidSearch());
+        return "index";
+    }
+
+    @GetMapping("/twitter/search")
+    public String searchTweets(@RequestParam("search")String search, Model model) throws TwitterException {
+        model.addAttribute("tweets",twitterService.fetchTweets(search,100));
+        return "index";
     }
 }
+

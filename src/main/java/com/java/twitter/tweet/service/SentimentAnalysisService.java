@@ -9,9 +9,9 @@ import edu.stanford.nlp.util.CoreMap;
 import org.springframework.stereotype.Service;
 import java.util.Properties;
 @Service
-public class SentimentAnalysis {
+public class SentimentAnalysisService {
 
-    public int analyse(String tweet) {
+    public  int analyse(String tweet) {
 
         Properties props = new Properties();
         props.setProperty("annotators", "tokenize, ssplit, pos, parse, sentiment");
