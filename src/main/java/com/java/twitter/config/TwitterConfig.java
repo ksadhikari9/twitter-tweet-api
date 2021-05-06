@@ -31,18 +31,6 @@ public class TwitterConfig  {
         return twitterFactory.getInstance();
     }
 
-    public TwitterStreamFactory twitterStreamFactory(){
-        ConfigurationBuilder cb = this.getTwitterConfigBuilder();
-        TwitterStreamFactory tsf = new TwitterStreamFactory(cb.build());
-        return tsf;
-    }
-
-    public TwitterStream twitterStream(){
-        if(this.twitterStream == null)
-            this.twitterStream =  this.twitterStreamFactory().getInstance();
-        return twitterStream;
-    }
-
     public ConfigurationBuilder getTwitterConfigBuilder() {
         ConfigurationBuilder cb =  new ConfigurationBuilder();
         cb.setOAuthConsumerKey(consumerKey)
@@ -52,30 +40,3 @@ public class TwitterConfig  {
         return cb;
     }
 }
-//    @Override
-//    public void addConnectionFactories(ConnectionFactoryConfigurer connectionFactoryConfigurer, Environment environment) {
-//        connectionFactoryConfigurer.addConnectionFactory(
-//                new TwitterConnectionFactory(
-//                        environment.getProperty("twitter.consumerKey"),
-//                        environment.getProperty("twitter.consumerSecret")
-//                )
-//        );
-//    }
-
-
-//    @Bean
-//    public Twitter getTwitter(){
-//        return new TwitterTemplate("FaQIQhhZCtZSvdYPfOCxnbRR9",
-//                "rf7lu8E7PyV75EQaGcoeRiUag7iDolt0E7JLe3ZBNczvK3ERxE",
-//                "2210667690-H95mmW62lLOh2TJ07Hks8CU70R6fPf7l7AIuqa9",
-//                "23S5rLtyIof9pFow1M98FhjiwIvcmvKAg2C8NSQ3BpqSL");
-//    }
-//    @Override
-//    public UserIdSource getUserIdSource() {
-//        return null;
-//    }
-//
-//    @Override
-//    public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
-//        return null;
-//    }

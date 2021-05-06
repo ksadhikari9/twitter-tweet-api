@@ -14,12 +14,42 @@
         </form>
       </nav>
       <div class="container bg-light">
-           <div th:each="tweet : ${tweets}" class="d-flex flex-column ">
-                <div th:utext="${tweet.html.replaceAll('/\n/','')}"></div>
-                <div class="alert alert-dark" th:if="${tweet.getSentimentType()+1!=null}" role="alert">
-                  Sentimental Analysis Rating <span th:text="${tweet.getSentimentType()+1}" class="bolder"></span><span> out of 5</span>
+           <div th:each="tweet : ${tweets}" class="d-flex flex-row" style="margin-top: 4px">
+                <div th:utext="${tweet.html.replaceAll('/\n/','')}" class="col-6"></div>
+                <div class="alert alert-dark col-6" role="alert">
+                    <h3>Sentiment Analysis</h3>
+                    <table class="table">
+                        <thead>
+                            <th>Sentiment Type</th>
+                            <th th:text="${tweet.getSentimentData().getSentimentType()}"></th>
+                        </thead>
+                        <thead>
+                        <th>Sentiment score (0-4)</th>
+                        <th th:text="${#strings.concat(tweet.getSentimentData().getSentimentScore())}"></th>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Very Positive Sentiment</td>
+                            <td th:text="${#strings.concat(#numbers.formatDecimal(tweet.getSentimentData().getVeryPositive(),1,2),'%')}"></td>
+                        <tr>
+                            <td>Positive Sentiment</td>
+                            <td th:text="${#strings.concat(#numbers.formatDecimal(tweet.getSentimentData().getPositive(),1,2),'%')}"></td>
+                        <tr>
+                            <td>Neutral Sentiment</td>
+                            <td th:text="${#strings.concat(#numbers.formatDecimal(tweet.getSentimentData().getNeutral(),1,2),'%')}"></td>
+                        </tr>
+                        <tr>
+                            <td>Negative Sentiment</td>
+                            <td th:text="${#strings.concat(#numbers.formatDecimal(tweet.getSentimentData().getNegative(),1,2),'%')}"></td>
+                        </tr>
+                        <tr>
+                            <td>Very Negative Sentiment</td>
+                            <td th:text="${#strings.concat(#numbers.formatDecimal(tweet.getSentimentData().getVeryNegative(),1,2),'%')}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-               <hr>
+               <br><br>
            </div>
       </div>
       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

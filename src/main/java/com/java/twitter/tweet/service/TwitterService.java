@@ -6,16 +6,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.java.twitter.config.TwitterConfig;
 
 import com.java.twitter.tweet.model.TwitterData;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import twitter4j.*;
+import twitter4j.Query;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
 
-import javax.xml.crypto.Data;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 @Service
 public class TwitterService {
     final TwitterConfig twitterConfig;
+
     final SentimentAnalysisService sentimentAnalysisService;
     final String url="https://publish.twitter.com/oembed?url=https://twitter.com/Interior/status/";
 
@@ -34,8 +36,8 @@ public class TwitterService {
     }
 
     public List<TwitterData> covidSearch() throws TwitterException {
-       String keyword="(IndiaFightsCorona OR Unite2FightCorona OR Covid OR Covid Help OR Bed OR Bed Availability OR Good Mental Health)";
-        List<TwitterData> twitterData = this.fetchTweets(keyword, 100);
+       String keyword="(IndiaFightsCorona OR Unite2FightCorona OR PositiveVibe)";
+        List<TwitterData> twitterData = this.fetchTweets(keyword, 1000);
         return twitterData.stream().sorted().collect(Collectors.toList());
     }
 
@@ -53,7 +55,7 @@ public class TwitterService {
                 e.printStackTrace();
             }
             return null;
-        }).collect(Collectors.toList());
+        }).sorted().collect(Collectors.toList());
     }
 
 
@@ -61,7 +63,6 @@ public class TwitterService {
         TwitterData twitterData = new TwitterData(
                 status.getCreatedAt(),
                 status.getId(),
-                2,
                 getHtmlStringByTwitterId(status.getId())
         );
         // Clean up tweets for analysis
@@ -70,7 +71,7 @@ public class TwitterService {
                 .replaceAll("@[\\S]+", "")
                 .replaceAll("#", "")
                 .replaceAll("[\\s]+", " ");
-        twitterData.setSentimentType(sentimentAnalysisService.analyse(text));
+        twitterData.setSentimentData(sentimentAnalysisService.analyse(text));
         return twitterData;
     }
 
