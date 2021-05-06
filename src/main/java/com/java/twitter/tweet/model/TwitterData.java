@@ -1,26 +1,25 @@
 package com.java.twitter.tweet.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
+import lombok.*;
 
 import java.util.Date;
 @Data
-@AllArgsConstructor
+@RequiredArgsConstructor
+@NoArgsConstructor
 @Setter@Getter
 public class TwitterData implements Comparable {
+    @NonNull
     Date createdAt;
+    @NonNull
     long id;
-    int sentimentType;
+    @NonNull
     String html;
 
-
+    SentimentData sentimentData;
 
     @Override
-    public int compareTo(@NotNull Object o) {
+    public int compareTo(Object o) {
         TwitterData a=(TwitterData)o;
-        return a.sentimentType-this.sentimentType;
+        return (int) ((a.sentimentData.getVeryPositive() + a.sentimentData.getPositive()) - (this.sentimentData.getVeryPositive() + this.sentimentData.positive));
     }
 }
